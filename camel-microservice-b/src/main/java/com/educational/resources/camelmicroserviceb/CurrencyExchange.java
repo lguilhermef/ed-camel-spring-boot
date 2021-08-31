@@ -9,7 +9,6 @@ public class CurrencyExchange {
     private BigDecimal conversionMultiple;
 
     public CurrencyExchange() {
-
     }
 
     public CurrencyExchange(Long id, String from, String to, BigDecimal conversionMultiple) {
@@ -50,5 +49,10 @@ public class CurrencyExchange {
 
     public void setConversionMultiple(BigDecimal conversionMultiple) {
         this.conversionMultiple = conversionMultiple;
+    }
+
+    @Override
+    public String toString() {
+        return "CurrencyExchange [id=" + this.id + "from=" + this.from + "to=" + this.to + "conversionMultiple=" + this.conversionMultiple + "]";
     }
 }
