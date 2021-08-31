@@ -2,11 +2,15 @@ package com.educational.resources.camelmicroserviceb;
 
 import java.math.BigDecimal;
 
-class CurrencyExchange {
+public class CurrencyExchange {
     private Long id;
     private String from;
     private String to;
     private BigDecimal conversionMultiple;
+
+    public CurrencyExchange() {
+
+    }
 
     public CurrencyExchange(Long id, String from, String to, BigDecimal conversionMultiple) {
         super();
@@ -30,5 +34,21 @@ class CurrencyExchange {
 
     public BigDecimal getConversionMultiple() {
         return this.conversionMultiple;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
+    }
+
+    public void setConversionMultiple(BigDecimal conversionMultiple) {
+        this.conversionMultiple = conversionMultiple;
     }
 }
