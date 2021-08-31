@@ -3,6 +3,8 @@ package com.educational.resources.camelmicroserviceb.routes;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 public class ActiveMqReceiverRouter extends RouteBuilder {
 
@@ -13,3 +15,4 @@ public class ActiveMqReceiverRouter extends RouteBuilder {
 
     }
 }
+
