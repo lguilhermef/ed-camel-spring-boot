@@ -3,13 +3,25 @@ package com.educational.resources.camelmicroservicea.routes.b;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 public class MyFileRouter extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
         from("file:files/input")
-                .log("${body}")
+                .routeId("Files-Input-Route")
+                .transform().body(String.class)
+                .choice()
+                    .when(simple("${file:ext} ends with 'xml'"))
+                        .log("XML FILE")
+                    .when(simple("${body} contains 'USD'"))
+                        .log("Not an XML FILE but contains USD")
+                    .otherwise()
+                        .log("Not a XML FILE")
+                //.body()
+                .end()
+                //.log("${body}")
+                .log("${messageHistory}")
                 .to("file:files/output");
     }
 }
