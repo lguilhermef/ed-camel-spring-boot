@@ -1,5 +1,7 @@
 package com.educational.resources.camelmicroservicea.routes.patterns;
 
+import org.apache.camel.AggregationStrategy;
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,12 +38,23 @@ public class EipPatternsRouter extends RouteBuilder {
                 .convertBodyTo(String.class)
                 .split(body(), ",")
                 .to("activemq:splitqueue");
-         */
 
         from("file:files/csv")
                 .convertBodyTo(String.class)
                 .split(method(splitter))
                 .to("activemq:split-queue");
+
+         */
+
+        //Aggregate
+        //Messages => Aggregate => Endpoint
+        //to, 3
+        from("file:files/aggregate-json")
+                .unmarshal().json()
+                .aggregate(simple("{body.to}"), new ArrayListAggregationStrategy())
+                .completionSize(3)
+                //.completionTimeout(HIGHEST)
+                .to("log:aggregate-json");
     }
 }
 
@@ -50,5 +63,14 @@ class SplitterComponent {
 
     public List<String> splitInput(String str) {
         return List.of("ABC", "DEF", "GHI");
+    }
+}
+
+@Component
+class ArrayListAggregationStrategy implements AggregationStrategy {
+
+    @Override
+    public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
+        return null;
     }
 }

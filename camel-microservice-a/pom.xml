@@ -67,6 +67,12 @@
 			<artifactId>camel-csv-starter</artifactId>
 			<version>${camel.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel.springboot</groupId>
+			<artifactId>camel-jackson-starter</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
