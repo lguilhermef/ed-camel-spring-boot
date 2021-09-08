@@ -1,8 +1,6 @@
 package com.educational.resources.camelmicroserviceb.routes;
 
-import com.educational.resources.camelmicroserviceb.CurrencyExchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.model.dataformat.JsonLibrary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +29,14 @@ public class ActiveMqReceiverRouter extends RouteBuilder {
                 .to("log:received-message-from-active-mq");
         */
 
-        from("activemq:my-activemq-xml-queue")
+        /*from("activemq:my-activemq-xml-queue")
                 .unmarshal()
                 .jacksonxml(CurrencyExchange.class)
+                .to("log:received-message-from-xml-active-mq");
+
+         */
+
+        from("activemq:split-queue")
                 .to("log:received-message-from-xml-active-mq");
     }
 }

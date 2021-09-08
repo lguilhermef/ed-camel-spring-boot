@@ -1,4 +1,4 @@
-package com.educational.resources.camelmicroserviceb;
+package com.educational.resources.camelmicroserviceb.routes;
 
 import java.math.BigDecimal;
 
