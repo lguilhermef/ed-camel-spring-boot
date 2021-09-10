@@ -25,6 +25,13 @@ public class EipPatternsRouter extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
+
+        //Tracing for debug
+        getContext().setTracing(true);
+
+        //Dead letter queue: whenever a message is processed, useful to log processors
+        errorHandler(deadLetterChannel("activemq:dead-letter-queue"));
+
         //Pipeline
         //Content Based Routing - choice()
         //Multicast multicast()
@@ -72,6 +79,9 @@ public class EipPatternsRouter extends RouteBuilder {
                 .transform().constant("Hardcoded Message for Routing Slip")
                 .routingSlip(simple(routingSlip));
 */
+
+
+
         //Dynamic Routing
         from("timer:routingSlip?period={{timePeriod}}")//reads from application.properties
                 .transform().constant("Hardcoded Message for Dynamic Routing")
@@ -79,6 +89,7 @@ public class EipPatternsRouter extends RouteBuilder {
 
 
         from("direct:endpoint1")
+                .wireTap("log:wire-tap")//Everything that goes to this endpoint is now logged
                 .to("{{endpoint-for-logging}}");//reads from application.properties
 
         from("direct:endpoint2")
