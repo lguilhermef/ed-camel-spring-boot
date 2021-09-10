@@ -73,13 +73,13 @@ public class EipPatternsRouter extends RouteBuilder {
                 .routingSlip(simple(routingSlip));
 */
         //Dynamic Routing
-        from("timer:routingSlip?period=10000")
+        from("timer:routingSlip?period={{timePeriod}}")//reads from application.properties
                 .transform().constant("Hardcoded Message for Dynamic Routing")
                 .dynamicRouter(method(dynamicRouterBean));
 
 
         from("direct:endpoint1")
-                .to("log:directendpoint1");
+                .to("{{endpoint-for-logging}}");//reads from application.properties
 
         from("direct:endpoint2")
                 .to("log:directendpoint2");
