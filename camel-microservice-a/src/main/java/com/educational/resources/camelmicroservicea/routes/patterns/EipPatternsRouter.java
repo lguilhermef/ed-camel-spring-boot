@@ -1,11 +1,14 @@
 package com.educational.resources.camelmicroservicea.routes.patterns;
 
+import com.educational.resources.camelmicroservicea.CurrencyExchange;
 import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -50,7 +53,7 @@ public class EipPatternsRouter extends RouteBuilder {
         //Messages => Aggregate => Endpoint
         //to, 3
         from("file:files/aggregate-json")
-                .unmarshal().json()
+                .unmarshal().json(JsonLibrary.Jackson, CurrencyExchange.class)
                 .aggregate(simple("{body.to}"), new ArrayListAggregationStrategy())
                 .completionSize(3)
                 //.completionTimeout(HIGHEST)
@@ -71,6 +74,22 @@ class ArrayListAggregationStrategy implements AggregationStrategy {
 
     @Override
     public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
-        return null;
+        Object newBody = newExchange.getIn().getBody();
+        ArrayList<Object> list = null;
+
+        if (oldExchange == null) {
+            list = new ArrayList<Object>();
+            list.add(newBody);
+            newExchange.getIn().setBody(list);
+
+            return newExchange;
+
+        } else {
+
+            list = oldExchange.getIn().getBody(ArrayList.class);
+            list.add(newBody);
+            return oldExchange;
+        }
+
     }
 }
