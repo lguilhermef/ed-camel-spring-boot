@@ -27,7 +27,7 @@ public class EipPatternsRouter extends RouteBuilder {
 /*
         from("timer:multicast-timer?period=10000")
                 .multicast()
-                .to("log:something1", "log:something2");
+                .to("log:something1", "log:something2", "log:something3");
 */
         //Message,Message2,Message3
         /*
@@ -58,6 +58,24 @@ public class EipPatternsRouter extends RouteBuilder {
                 .completionSize(3)
                 //.completionTimeout(HIGHEST)
                 .to("log:aggregate-json");
+
+        //routing slip
+        //String routingSlip = "direct:endpoint1, direct:endpoint2, direct:endpoint3"
+        String routingSlip = "direct:endpoint1,direct:endpoint2";
+
+        from("timer:routingSlip?period=10000")
+                .transform().constant("Hardcoded Message")
+                .routingSlip(simple(routingSlip));
+
+        from("direct:endpoint1")
+                .to("log:directendpoint1");
+
+        from("direct:endpoint2")
+                .to("log:directendpoint2");
+
+        from("direct:endpoint3")
+                .to("log:directendpoint3");
+
     }
 }
 
